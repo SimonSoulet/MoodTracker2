@@ -12,6 +12,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -242,9 +243,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     private void configureAlarmManager(){
         Intent alarmIntent = new Intent(MainActivity.this, SaveMoodReceiver.class);
-        alarmIntent.putExtra(PREF_KEY_MOOD, mCurrentMood);
-        String userComment = mPreferences.getString(PREF_KEY_COMMENT, "");
-        alarmIntent.putExtra(PREF_KEY_COMMENT, userComment);
         mPendingIntent = PendingIntent.getBroadcast(MainActivity.this,0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 

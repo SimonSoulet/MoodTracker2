@@ -93,7 +93,6 @@ public class HistoryActivity extends AppCompatActivity {
             Log.d("TAG", "mood"+ moodWeek[i]);
             commentWeek[i] = mPreferences.getString(SaveMoodReceiver.PREF_KEY_COMMENT+i, "");
             Log.d("TAG", "comment"+ commentWeek[i]);
-
         }
 
         System.out.println("Tableau HistoryActivity");

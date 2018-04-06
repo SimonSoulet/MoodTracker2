@@ -24,9 +24,8 @@ public class SaveMoodReceiver extends BroadcastReceiver{
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Log.e("TAG", "Humeur du jour sauvegardée");
 
-        //Get mood and comment save by the user
-        int mood = intent.getIntExtra(MainActivity.PREF_KEY_MOOD, -1);
-        String comment = intent.getStringExtra(MainActivity.PREF_KEY_COMMENT);
+        int mood = mPreferences.getInt(MainActivity.PREF_KEY_MOOD, -1);//mood by default if the user don't use the app
+        String comment = mPreferences.getString(MainActivity.PREF_KEY_COMMENT, "Pas d'humeur enregistrée"); //comment by default if the user don't use the app
 
         //Create 2 tables (mood and comment)
         int moodWeek[] = new int[7];
