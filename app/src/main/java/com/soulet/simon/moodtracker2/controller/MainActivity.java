@@ -48,8 +48,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        mCurrentMood = 3;
-
+        this.getPreviousMoodPreferences();
         this.initResources();
         this.configureGestureDetectorAndLayout();
         this.configureCommentBtn();
@@ -65,6 +64,15 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     //----------------------------------------------------------------------------------------------
     //                                      INITIALIZATION
     //----------------------------------------------------------------------------------------------
+
+    private void getPreviousMoodPreferences(){ // get the last mood that the user save when we start the activity
+        int mood = mPreferences.getInt(PREF_KEY_MOOD, -1);
+        if(mood != -1){
+            mCurrentMood = mood;
+        }else{
+            mCurrentMood = 3;
+        }
+    }
 
     private void initResources(){
         mLayout.setBackgroundResource(color[mCurrentMood]);
