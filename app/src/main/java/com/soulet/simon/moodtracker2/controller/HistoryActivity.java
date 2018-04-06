@@ -1,12 +1,16 @@
 package com.soulet.simon.moodtracker2.controller;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.soulet.simon.moodtracker2.R;
+import com.soulet.simon.moodtracker2.utils.SaveMoodReceiver;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -26,13 +30,21 @@ public class HistoryActivity extends AppCompatActivity {
     private ImageView mImageView2DA;
     private ImageView mImageViewY;
 
+    private int moodWeek[] = new int[7];
+    private String commentWeek[] = new String[7];
+
+    private SharedPreferences mPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         this.configureLayouts();
         this.configureImages();
+        this.getPreferencesFromReceiver();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -65,6 +77,26 @@ public class HistoryActivity extends AppCompatActivity {
         mImageView3DA = (ImageView) findViewById(R.id.activity_history_img_ThreeDA);
         mImageView2DA = (ImageView) findViewById(R.id.activity_history_img_TwoDA);
         mImageViewY = (ImageView) findViewById(R.id.activity_history_img_Y);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                                     UPDATE UI
+    //----------------------------------------------------------------------------------------------
+
+    private void getPreferencesFromReceiver(){ //Get moods and comments stock in preferences
+        for(int i = 0; i < 7; i++){
+            moodWeek[i] = mPreferences.getInt(SaveMoodReceiver.PREF_KEY_MOOD+i,-1);
+            Log.d("TAG", "mood"+ moodWeek[i]);
+            commentWeek[i] = mPreferences.getString(SaveMoodReceiver.PREF_KEY_COMMENT+i, "");
+            Log.d("TAG", "comment"+ commentWeek[i]);
+
+        }
+
+        System.out.println("Tableau HistoryActivity");
+        for(int i = 0; i < 7; i++){
+            System.out.println("moodWeek à l'emplacement "+i+" = "+moodWeek[i]);
+            System.out.println("commentWeek à l'emplacement "+i+" = "+commentWeek[i]);
+        }
     }
 
     private View.OnClickListener onClickLayout = new View.OnClickListener() {
