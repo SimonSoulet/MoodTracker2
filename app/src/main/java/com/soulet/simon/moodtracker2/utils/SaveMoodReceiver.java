@@ -36,5 +36,15 @@ public class SaveMoodReceiver extends BroadcastReceiver{
         moodWeek[6] = mood;
         commentWeek[6] = comment;
 
+        for(int i = 1; i < 7; i++){//Rumbling between days (preferences index i become preference index i-1)
+            moodWeek[i-1] = mPreferences.getInt(PREF_KEY_MOOD+i,-1);
+            commentWeek[i-1] = mPreferences.getString(PREF_KEY_COMMENT+i, "");
+        }
+
+        System.out.println("Tableau Receiver");
+        for(int i = 0; i < 7; i++){
+            System.out.println("moodWeek à l'emplacement "+i+" = "+moodWeek[i]);
+            System.out.println("commentWeek à l'emplacement "+i+" = "+commentWeek[i]);
+        }
     }
 }
