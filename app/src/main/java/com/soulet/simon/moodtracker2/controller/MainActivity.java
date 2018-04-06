@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public static final String PREF_KEY_COMMENT = "PREF_KEY_COMMENT";
     public static final String PREF_KEY_MOOD = "PREF_KEY_MOOD";
 
+    private MediaPlayer mMediaPlayer; // to execute a note of music
+
     private PendingIntent mPendingIntent; // to execute broadcast
 
     int smiley[] = {R.drawable.smiley_sad, R.drawable.smiley_disappointed, R.drawable.smiley_normal,
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     int color[] = {R.color.faded_red, R.color.warm_grey, R.color.cornflower_blue_65,
             R.color.light_sage, R.color.banana_yellow};
+
+    int music[] = {R.raw.sad, R.raw.disappointed, R.raw.normal, R.raw.happy, R.raw.super_happy};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private void initResources(){
         mLayout.setBackgroundResource(color[mCurrentMood]);
         mSmiley.setImageResource(smiley[mCurrentMood]);
+        mMediaPlayer = MediaPlayer.create(this, music[mCurrentMood]);
+        mMediaPlayer.start();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -214,6 +221,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             mCurrentMood++;
             mLayout.setBackgroundResource(color[mCurrentMood]);
             mSmiley.setImageResource(smiley[mCurrentMood]);
+            mMediaPlayer = MediaPlayer.create(this, music[mCurrentMood]);
+            mMediaPlayer.start();
         }
     }
 
@@ -222,6 +231,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             mCurrentMood--;
             mSmiley.setImageResource(smiley[mCurrentMood]);
             mLayout.setBackgroundResource(color[mCurrentMood]);
+            mMediaPlayer = MediaPlayer.create(this, music[mCurrentMood]);
+            mMediaPlayer.start();
         }
     }
 
