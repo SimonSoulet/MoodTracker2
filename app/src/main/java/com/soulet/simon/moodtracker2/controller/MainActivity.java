@@ -1,13 +1,16 @@
 package com.soulet.simon.moodtracker2.controller;
 
-import android.media.MediaPlayer;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         this.initResources();
         this.configureGestureDetectorAndLayout();
+        this.configureCommentBtn();
+        this.configureHistoryBtn();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -62,6 +67,43 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             public boolean onTouch(View v, MotionEvent event) {
                 mGesture.onTouchEvent(event);
                 return true;
+            }
+        });
+    }
+
+    private void configureCommentBtn(){
+        mComment = (Button) findViewById(R.id.activity_main_comment_btn);
+        mComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("Commentaire");
+                final EditText comment = new EditText(MainActivity.this);
+                builder.setView(comment);
+                builder.setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                builder.create();
+                builder.show();
+            }
+        });
+    }
+
+    private void configureHistoryBtn(){
+        mHistory = (Button) findViewById(R.id.activity_main_history_btn);
+        mHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent historyactivity = new Intent(MainActivity.this, HistoryActivity.class);
+                startActivity(historyactivity);
             }
         });
     }
