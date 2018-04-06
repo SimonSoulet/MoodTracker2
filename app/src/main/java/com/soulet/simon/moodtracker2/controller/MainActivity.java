@@ -1,6 +1,8 @@
 package com.soulet.simon.moodtracker2.controller;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 
 import com.soulet.simon.moodtracker2.R;
 import com.soulet.simon.moodtracker2.utils.SaveMoodReceiver;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener {
 
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         this.configureCommentBtn();
         this.configureHistoryBtn();
         this.configureAlarmManager();
+        this.saveMoodOfTheDay();
     }
 
     @Override
@@ -230,5 +235,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         String userComment = mPreferences.getString(PREF_KEY_COMMENT, "");
         alarmIntent.putExtra(PREF_KEY_COMMENT, userComment);
         mPendingIntent = PendingIntent.getBroadcast(MainActivity.this,0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private void saveMoodOfTheDay(){ //Save the current mood at 0:00 am
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        //calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)+1);
+        manager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 60*1000, mPendingIntent);
     }
 }
