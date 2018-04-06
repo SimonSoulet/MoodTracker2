@@ -2,6 +2,8 @@ package com.soulet.simon.moodtracker2.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.soulet.simon.moodtracker2.R;
 
@@ -24,6 +27,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private RelativeLayout mLayout;
     private int mCurrentMood; // to stock the mood of the user on scroll
     private GestureDetectorCompat mGesture; // to configure the scroll
+
+    private SharedPreferences mPreferences; //to stock the mood and comment of the day
+    public static final String PREF_KEY_COMMENT = "PREF_KEY_COMMENT";
+    public static final String PREF_KEY_MOOD = "PREF_KEY_MOOD";
 
     int smiley[] = {R.drawable.smiley_sad, R.drawable.smiley_disappointed, R.drawable.smiley_normal,
             R.drawable.smiley_happy, R.drawable.smiley_super_happy};
@@ -39,12 +46,20 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         mLayout = (RelativeLayout) findViewById(R.id.activity_main_layout);
         mSmiley = (ImageView) findViewById(R.id.activity_main_smiley_img);
 
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         mCurrentMood = 3;
 
         this.initResources();
         this.configureGestureDetectorAndLayout();
         this.configureCommentBtn();
         this.configureHistoryBtn();
+    }
+
+    @Override
+    protected void onStop() { // stock the select mood when the activity stop
+        super.onStop();
+        mPreferences.edit().putInt(PREF_KEY_MOOD, mCurrentMood).apply();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -83,7 +98,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 builder.setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        mPreferences.edit().putString(PREF_KEY_COMMENT, comment.getText().toString()).apply();
+                        mPreferences.edit().putInt(PREF_KEY_MOOD, mCurrentMood).apply();
+                        String userComment = mPreferences.getString(PREF_KEY_COMMENT, "");
+                        if(userComment.equals("")){
+                            Toast.makeText(MainActivity.this, "Commentaire enregistré !", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(MainActivity.this, "Nouveau commentaire enregistré !", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 builder.setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
