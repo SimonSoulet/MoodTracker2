@@ -4,10 +4,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.soulet.simon.moodtracker2.R;
 import com.soulet.simon.moodtracker2.utils.SaveMoodReceiver;
@@ -45,6 +48,7 @@ public class HistoryActivity extends AppCompatActivity {
         this.configureLayouts();
         this.configureImages();
         this.getPreferencesFromReceiver();
+        this.updateAllLayouts();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -99,9 +103,99 @@ public class HistoryActivity extends AppCompatActivity {
         }
     }
 
+    private void updateAllLayouts(){
+        this.updateLayout(mRelativeLayout1WA, mImageView1WA, 0);
+        this.updateLayout(mRelativeLayout6DA, mImageView6DA, 1);
+        this.updateLayout(mRelativeLayout5DA, mImageView5DA, 2);
+        this.updateLayout(mRelativeLayout4DA, mImageView4DA, 3);
+        this.updateLayout(mRelativeLayout3DA, mImageView3DA, 4);
+        this.updateLayout(mRelativeLayout2DA, mImageView2DA, 5);
+        this.updateLayout(mRelativeLayoutY, mImageViewY, 6);
+    }
+
+    private void updateLayout(RelativeLayout relativeLayout, ImageView imageView, int i){
+        this.updateLayoutWidthAndColor(relativeLayout, i);
+        this.updateLayoutImage(imageView, i);
+    }
+
+    private void updateLayoutWidthAndColor(RelativeLayout relativeLayout, int i){
+        ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
+        int widthEcran = getWidthEcran();
+        int mood = moodWeek[i];
+        switch(mood){
+            case 0:
+                params.width = widthEcran/5;
+                relativeLayout.setBackgroundColor(getResources().getColor(R.color.faded_red));
+                break;
+            case 1:
+                params.width = (2*widthEcran)/5;
+                relativeLayout.setBackground(getResources().getDrawable(R.color.warm_grey));
+                break;
+            case 2:
+                params.width = (3*widthEcran)/5;
+                relativeLayout.setBackground(getResources().getDrawable(R.color.cornflower_blue_65));
+                break;
+            case 3:
+                params.width = (4*widthEcran)/5;
+                relativeLayout.setBackground(getResources().getDrawable(R.color.light_sage));
+                break;
+            case 4:
+                params.width = widthEcran;
+                relativeLayout.setBackground(getResources().getDrawable(R.color.banana_yellow));
+                break;
+        }
+    }
+
+    private int getWidthEcran(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
+    }
+
+    private void updateLayoutImage(ImageView imageView, int i){
+        String comment = commentWeek[i];
+        if(comment.equals("")){
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                                       ON CLICK
+    //----------------------------------------------------------------------------------------------
+
     private View.OnClickListener onClickLayout = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            int layoutTag = Integer.valueOf(v.getTag().toString());
+            switch(layoutTag){
+                case 10:
+                    getMessageToast(0);
+                    break;
+                case 20:
+                    getMessageToast(1);
+                    break;
+                case 30:
+                    getMessageToast(2);
+                    break;
+                case 40:
+                    getMessageToast(3);
+                    break;
+                case 50:
+                    getMessageToast(4);
+                    break;
+                case 60:
+                    getMessageToast(5);
+                    break;
+                case 70:
+                    getMessageToast(6);
+                    break;
+            }
         }
     };
+
+    private void getMessageToast(int i){
+        if(commentWeek[i] != ""){
+            Toast.makeText(this, commentWeek[i], Toast.LENGTH_SHORT).show();
+        }
+    }
 }
