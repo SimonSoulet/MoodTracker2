@@ -46,5 +46,14 @@ public class SaveMoodReceiver extends BroadcastReceiver{
             System.out.println("moodWeek à l'emplacement "+i+" = "+moodWeek[i]);
             System.out.println("commentWeek à l'emplacement "+i+" = "+commentWeek[i]);
         }
+
+        for(int i = 0; i < 7; i++){//Put in preferences moods and comments of the 7 last days
+            mPreferences.edit().putInt(PREF_KEY_MOOD+i, moodWeek[i]).apply();
+            mPreferences.edit().putString(PREF_KEY_COMMENT+i, commentWeek[i]).apply();
+        }
+
+        //Remove the mood and comment of the day
+        mPreferences.edit().remove(MainActivity.PREF_KEY_MOOD).apply();
+        mPreferences.edit().remove(MainActivity.PREF_KEY_COMMENT).apply();
     }
 }
