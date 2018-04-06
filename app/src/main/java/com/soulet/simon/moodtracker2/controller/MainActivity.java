@@ -1,5 +1,6 @@
 package com.soulet.simon.moodtracker2.controller;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.soulet.simon.moodtracker2.R;
+import com.soulet.simon.moodtracker2.utils.SaveMoodReceiver;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener {
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private SharedPreferences mPreferences; //to stock the mood and comment of the day
     public static final String PREF_KEY_COMMENT = "PREF_KEY_COMMENT";
     public static final String PREF_KEY_MOOD = "PREF_KEY_MOOD";
+
+    private PendingIntent mPendingIntent; // to execute broadcast
 
     int smiley[] = {R.drawable.smiley_sad, R.drawable.smiley_disappointed, R.drawable.smiley_normal,
             R.drawable.smiley_happy, R.drawable.smiley_super_happy};
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         this.configureGestureDetectorAndLayout();
         this.configureCommentBtn();
         this.configureHistoryBtn();
+        this.configureAlarmManager();
     }
 
     @Override
@@ -213,5 +218,17 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             mSmiley.setImageResource(smiley[mCurrentMood]);
             mLayout.setBackgroundResource(color[mCurrentMood]);
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //                                   SAVE MOOD AND COMMENT
+    //----------------------------------------------------------------------------------------------
+
+    private void configureAlarmManager(){
+        Intent alarmIntent = new Intent(MainActivity.this, SaveMoodReceiver.class);
+        alarmIntent.putExtra(PREF_KEY_MOOD, mCurrentMood);
+        String userComment = mPreferences.getString(PREF_KEY_COMMENT, "");
+        alarmIntent.putExtra(PREF_KEY_COMMENT, userComment);
+        mPendingIntent = PendingIntent.getBroadcast(MainActivity.this,0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

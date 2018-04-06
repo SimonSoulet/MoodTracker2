@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.HistoryActivity"></activity>
+        <receiver android:name=".utils.SaveMoodReceiver"/>
     </application>
 
 </manifest>
